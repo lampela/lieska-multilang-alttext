@@ -3,7 +3,7 @@
 Plugin Name: Lieska Multi-Language AI Alt Text – Free
 Description: Multilingual alt text for images with OpenAI using your own API key. Free edition with a daily limit (3 images/day), manual generation (Attachment screen & Media modal), and automatic language-aware rendering (WPML, Polylang, TranslatePress).
 Author: Lieska
-Version: 1.0.5
+Version: 1.0.7
 Text Domain: lieska-mlat
 */
 
