@@ -12,14 +12,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Rakenna WordPress-yhteensopiva ZIP, jonka juuressa on plugin-kansio
       - name: Build plugin zip (WordPress-compatible)
         run: |
           mkdir -p dist
-          # Muuta tarvittaessa kansioksi se, mikä on WordPressin plugins-hakemistossa
           PLUGIN_DIR="lieska-multilang-alttext"
           git archive --format=zip --output "dist/${PLUGIN_DIR}-${GITHUB_REF_NAME}.zip" --prefix="${PLUGIN_DIR}/" HEAD
           ls -l dist
+
+      - name: Verify ZIP structure
+        run: |
+          unzip -l "dist/lieska-multilang-alttext-${GITHUB_REF_NAME}.zip" | head -n 20
+          if unzip -l "dist/lieska-multilang-alttext-${GITHUB_REF_NAME}.zip" | awk '{print $4}' | grep -v '^lieska-multilang-alttext/' | grep -q .; then
+            echo "❌ ZIP sisältää tiedostoja väärässä paikassa"
+            exit 1
+          fi
 
       - name: Create/Update GitHub Release and upload ZIP
         uses: softprops/action-gh-release@v2
@@ -30,4 +36,3 @@ jobs:
           files: dist/lieska-multilang-alttext-${{ github.ref_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
