@@ -3,7 +3,7 @@
  * Plugin Name: Lieska Multi-Language Alt Text – Free
  * Plugin URI:  https://www.lieska.net
  * Description: Manage alt texts for images in multiple languages. Works with WPML, Polylang, and other multilingual plugins. This free edition provides manual tools for multilingual alt texts without AI generation.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      Lieska
  * Author URI:  https://www.lieska.net
  * License:     GPL-2.0-or-later
