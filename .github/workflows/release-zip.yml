@@ -1,0 +1,33 @@
+name: Build & Upload Free ZIP
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-zip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Rakenna WordPress-yhteensopiva ZIP, jonka juuressa on plugin-kansio
+      - name: Build plugin zip (WordPress-compatible)
+        run: |
+          mkdir -p dist
+          # Muuta tarvittaessa kansioksi se, mikä on WordPressin plugins-hakemistossa
+          PLUGIN_DIR="lieska-multilang-alttext"
+          git archive --format=zip --output "dist/${PLUGIN_DIR}-${GITHUB_REF_NAME}.zip" --prefix="${PLUGIN_DIR}/" HEAD
+          ls -l dist
+
+      - name: Create/Update GitHub Release and upload ZIP
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Free ${{ github.ref_name }}"
+          body: "Automated Free release for ${{ github.ref_name }}."
+          files: dist/lieska-multilang-alttext-${{ github.ref_name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

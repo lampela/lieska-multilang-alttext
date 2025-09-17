@@ -1,0 +1,17 @@
+# OS / tools
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Dependencies / builds
+node_modules/
+vendor/
+dist/
+*.log
+*.zip
+
+# Composer/npm locks (valinnainen)
+package-lock.json
+composer.lock
+
