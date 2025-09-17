@@ -19,13 +19,20 @@ jobs:
           git archive --format=zip --output "dist/${PLUGIN_DIR}-${GITHUB_REF_NAME}.zip" --prefix="${PLUGIN_DIR}/" HEAD
           ls -l dist
 
-      - name: Verify ZIP structure
+          - name: Verify ZIP structure
         run: |
-          unzip -l "dist/lieska-multilang-alttext-${GITHUB_REF_NAME}.zip" | head -n 20
-          if unzip -l "dist/lieska-multilang-alttext-${GITHUB_REF_NAME}.zip" | awk '{print $4}' | grep -v '^lieska-multilang-alttext/' | grep -q .; then
-            echo "❌ ZIP sisältää tiedostoja väärässä paikassa"
+          ZIP="dist/lieska-multilang-alttext-${GITHUB_REF_NAME}.zip"
+          echo "Listing ZIP contents:"
+          unzip -Z1 "$ZIP" | head -n 20
+
+          # Kaikkien polkujen on alettava 'lieska-multilang-alttext/'
+          BAD=$(unzip -Z1 "$ZIP" | grep -v '^lieska-multilang-alttext/')
+          if [ -n "$BAD" ]; then
+            echo "❌ ZIP sisältää tiedostoja väärässä paikassa:"
+            echo "$BAD" | head -n 50
             exit 1
           fi
+          echo "✅ ZIP-rakenne OK"
 
       - name: Create/Update GitHub Release and upload ZIP
         uses: softprops/action-gh-release@v2
